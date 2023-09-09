@@ -6,5 +6,9 @@ mbr.img: mbr.S
 run: mbr.img
 	qemu-system-x86_64 $<
 
+debug: mbr.img
+	qemu-system-x86_64 -s -S $< & 
+	gdb -x init.gdb
+
 clean: 
 	rm -f *.img *.o a.out
