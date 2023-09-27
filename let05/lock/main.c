@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <pthread.h>
 
-#include "lock.h"
+#include "spin_lock.h"
 
 #define MAX 1000000
 
@@ -10,9 +10,9 @@ int count = 0;
 void *tfunc(void *arg) {
     lock_t *l = (lock_t *) arg;
     for (int i = 0; i < MAX; i++) {
-	lock(l);
+	spin_lock(l);
         count++;
-        unlock(l);
+        spin_unlock(l);
     }
     return NULL;
 }
@@ -21,7 +21,7 @@ int main() {
     pthread_t t1, t2;
     lock_t lock;
 
-    lock_init(&lock);
+    spin_lock_init(&lock);
 
     pthread_create(&t1, NULL, tfunc, &lock);
     pthread_create(&t2, NULL, tfunc, &lock);
